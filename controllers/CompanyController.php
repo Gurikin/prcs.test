@@ -5,6 +5,7 @@ namespace app\controllers;
 use Yii;
 use app\models\Company;
 use app\models\CompanySearch;
+use yii\data\Sort;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
@@ -37,10 +38,27 @@ class CompanyController extends Controller
     {
         $searchModel = new CompanySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+        $sort = new Sort([
+            'attributes' => [
+                'name' => [
+                    'desc' => ['companies.inn' => SORT_DESC],
+                    'asc' => ['companies.inn' => SORT_ASC],
+                    'default' => SORT_ASC,
+                    'label' => 'Название'
+                ],
+                'inn' => [
+                    'desc' => ['companies.inn' => SORT_DESC],
+                    'asc' => ['companies.inn' => SORT_ASC],
+                    'label' => 'ИНН'
+                ],
+            ],
+        ]);
+        $dataProvider->query->orderBy($sort->orders);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
+            'sort' => $sort,
         ]);
     }
 

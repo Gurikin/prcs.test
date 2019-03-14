@@ -5,6 +5,7 @@ namespace app\models;
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
 use app\models\Company;
+use yii\data\Sort;
 
 /**
  * CompanySearch represents the model behind the search form of `app\models\Company`.

@@ -1,20 +1,20 @@
 <?php
 
-namespace app\controllers;
+namespace app\controllers\admin;
 
 use Yii;
-use app\models\Company;
-use app\models\CompanySearch;
-use yii\data\Sort;
+use app\models\admin\CompaniesHistory;
+use app\models\admin\CompaniesHistorySearch;
 use yii\filters\AccessControl;
+use yii\filters\AccessRule;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
 use yii\filters\VerbFilter;
 
 /**
- * CompanyController implements the CRUD actions for Company model.
+ * CompaniesHistoryController implements the CRUD actions for CompaniesHistory model.
  */
-class CompanyController extends Controller
+class CompaniesHistoryController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -24,18 +24,18 @@ class CompanyController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['editor-index', 'admin-index', 'view', 'create', 'update', 'delete', 'moderate'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update'],
+                        'actions' => ['editor-index', 'view', 'create', 'update'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->getUser()->identity->role === 'editor';
                         }
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['admin-index', 'view', 'update', 'delete'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->getUser()->identity->role === 'admin';
                         }
@@ -52,39 +52,37 @@ class CompanyController extends Controller
     }
 
     /**
-     * Lists all Company models.
+     * Lists all CompaniesHistory models.
      * @return mixed
      */
-    public function actionIndex()
+    public function actionEditorIndex()
     {
-        $searchModel = new CompanySearch();
+        $searchModel = new CompaniesHistorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-        $sort = new Sort([
-            'attributes' => [
-                'name' => [
-                    'desc' => [$searchModel::tableName() . '.name' => SORT_DESC],
-                    'asc' => [$searchModel::tableName() . '.name' => SORT_ASC],
-                    'default' => SORT_ASC,
-                    'label' => 'Название'
-                ],
-                'inn' => [
-                    'desc' => [$searchModel::tableName() . '.inn' => SORT_DESC],
-                    'asc' => [$searchModel::tableName() . '.inn' => SORT_ASC],
-                    'label' => 'ИНН'
-                ],
-            ],
-        ]);
-        $dataProvider->query->orderBy($sort->orders);
 
         return $this->render('index', [
             'searchModel' => $searchModel,
             'dataProvider' => $dataProvider,
-            'sort' => $sort,
         ]);
     }
 
     /**
-     * Displays a single Company model.
+     * Lists all CompaniesHistory models.
+     * @return mixed
+     */
+    public function actionAdminIndex()
+    {
+        $searchModel = new CompaniesHistorySearch();
+        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
+
+        return $this->render('index', [
+            'searchModel' => $searchModel,
+            'dataProvider' => $dataProvider,
+        ]);
+    }
+
+    /**
+     * Displays a single CompaniesHistory model.
      * @param integer $id
      * @return mixed
      * @throws NotFoundHttpException if the model cannot be found
@@ -97,13 +95,13 @@ class CompanyController extends Controller
     }
 
     /**
-     * Creates a new Company model.
+     * Creates a new CompaniesHistory model.
      * If creation is successful, the browser will be redirected to the 'view' page.
      * @return mixed
      */
     public function actionCreate()
     {
-        $model = new Company();
+        $model = new CompaniesHistory();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -115,7 +113,7 @@ class CompanyController extends Controller
     }
 
     /**
-     * Updates an existing Companies model.
+     * Updates an existing CompaniesHistory model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
      * @return mixed
@@ -124,31 +122,18 @@ class CompanyController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-//        $post = Yii::$app->request->post();
-        $historyModel = $model->getHistoryToUpdate();
-        if ($historyModel !== false) {
-            var_dump($historyModel);
-//            return $this->render('@app/views/admin/companies-history/view', [
-//                'model' => $historyModel,
-//            ]);
+
+        if ($model->load(Yii::$app->request->post()) && $model->save()) {
+            return $this->redirect(['view', 'id' => $model->id]);
         }
+
         return $this->render('update', [
             'model' => $model,
-            'historyModel' => $historyModel
         ]);
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        }
-//
-//        return $this->render('update', [
-//            'model' => $model,
-//        ]);
     }
 
     /**
-     * Deletes an existing Companies model.
+     * Deletes an existing CompaniesHistory model.
      * If deletion is successful, the browser will be redirected to the 'index' page.
      * @param integer $id
      * @return mixed
@@ -162,15 +147,15 @@ class CompanyController extends Controller
     }
 
     /**
-     * Finds the Company model based on its primary key value.
+     * Finds the CompaniesHistory model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Company the loaded model
+     * @return CompaniesHistory the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Company::findOne($id)) !== null) {
+        if (($model = CompaniesHistory::findOne($id)) !== null) {
             return $model;
         }
 

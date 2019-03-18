@@ -31,6 +31,7 @@
 }
 
 .org-cont .org-pane {
+  height: 275px;
   width: 100%;
   background-color: #e3f4f4;
   border: 1px solid #d5e6e6;
@@ -41,6 +42,10 @@
   box-shadow: 0 0 15px -8px #000;
   color: #333;
   padding: 0px 10px 10px 10px;
+}
+
+.org-cont .org-pane .org-body {
+  height: 60%;
 }
 
 .org-cont .org-pane .org-head p {
@@ -101,50 +106,13 @@
   padding: 5px 10px 0 10px;
 }
 
+.info-block .info-footer {
+  padding: 10px 25px 10px 10px;
+  border-top: 1px solid #d2e3e3;
+}
+
 @media only screen and (min-width: 50px) and (max-width: 768px) {
   .org-cont {
     min-width: 600px;
   }
-}
-footer {
-  display: flex;
-  width: 100%;
-  background-color: #303030;
-  justify-content: center;
-}
-
-footer .footer-wrapper {
-  display: flex;
-  width: 960px;
-  margin: 0 auto;
-  justify-content: space-between;
-}
-
-footer .footer-wrapper .foot-col {
-  color: #ffffff;
-  width: 26%;
-}
-.menu {
-  display: flex;
-  width: 100%;
-  justify-content: center;
-  background-color: #303030;
-  font: 14px Times;
-}
-
-.menu ul {
-  display: flex;
-  width: 960px;
-  margin: 0 auto;
-  justify-content: space-around;
-  list-style: none;
-}
-
-.menu ul li a {
-  color: #ffffff;
-  text-decoration: none;
-}
-
-.menu ul li a:active {
-  color: #ffffff;
 }

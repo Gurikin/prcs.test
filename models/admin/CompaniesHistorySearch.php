@@ -1,16 +1,15 @@
 <?php
 
-namespace app\models;
+namespace app\models\admin;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Company;
-use yii\data\Sort;
+use app\models\admin\CompaniesHistory;
 
 /**
- * CompanySearch represents the model behind the search form of `app\models\Company`.
+ * CompaniesHistorySearch represents the model behind the search form of `app\models\admin\CompaniesHistory`.
  */
-class CompanySearch extends Company
+class CompaniesHistorySearch extends CompaniesHistory
 {
     /**
      * {@inheritdoc}
@@ -18,8 +17,8 @@ class CompanySearch extends Company
     public function rules()
     {
         return [
-            [['inn'], 'integer'],
-            [['name', 'director', 'adress'], 'safe'],
+            [['id', 'inn', 'status'], 'integer'],
+            [['name', 'director', 'adress', 'last_change'], 'safe'],
         ];
     }
 
@@ -41,15 +40,12 @@ class CompanySearch extends Company
      */
     public function search($params)
     {
-        $query = Company::find();
+        $query = CompaniesHistory::find();
 
         // add conditions that should always apply here
 
         $dataProvider = new ActiveDataProvider([
             'query' => $query,
-            'pagination' => [
-                'pageSize' => 10,
-            ],
         ]);
 
         $this->load($params);
@@ -60,8 +56,15 @@ class CompanySearch extends Company
             return $dataProvider;
         }
 
+        // grid filtering conditions
+        $query->andFilterWhere([
+            'id' => $this->id,
+            'inn' => $this->inn,
+            'status' => $this->status,
+            'last_change' => $this->last_change,
+        ]);
+
         $query->andFilterWhere(['like', 'name', $this->name])
-            ->andFilterWhere(['like', 'inn', $this->inn])
             ->andFilterWhere(['like', 'director', $this->director])
             ->andFilterWhere(['like', 'adress', $this->adress]);
 

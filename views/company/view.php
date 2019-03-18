@@ -10,31 +10,43 @@ $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 \yii\web\YiiAsset::register($this);
+if (!Yii::$app->user->isGuest) {
+    $footer = Yii::$app->getUser()->identity->role === 'admin' ? ''
+        : '<div class="info-footer d-flex justify-content-end">
+            <a href="/company/update?id='
+            .Html::encode($model->inn)
+            .'" class="btn btn-danger align-right">Update</a>
+           </div>';
+} else {
+    $footer = '';
+}
 ?>
-<div class="company-view">
-
-    <h1><?= Html::encode($this->title) ?></h1>
-
-    <p>
-        <?= Html::a('Update', ['update', 'id' => $model->id], ['class' => 'btn btn-primary']) ?>
-        <?= Html::a('Delete', ['delete', 'id' => $model->id], [
-            'class' => 'btn btn-danger',
-            'data' => [
-                'confirm' => 'Are you sure you want to delete this item?',
-                'method' => 'post',
-            ],
-        ]) ?>
-    </p>
-
-    <?= DetailView::widget([
-        'model' => $model,
-        'attributes' => [
-            'id',
-            'name',
-            'inn',
-            'director',
-            'adress:ntext',
-        ],
-    ]) ?>
-
+<div class="company-view container-fluid d-flex justify-content-center">
+    <div class="col-lg-8 col-md-12 col-xs-12 right-content">
+        <div class="info-block">
+            <div class="info-header d-flex">
+                <div class="info-head col-1"><i class="fa fa-info-circle fa-3x"></i></div>
+                <div class="info-title col-11"><h1><?= Html::encode($this->title) ?></h1></div>
+                <p> &nbsp; </p>
+            </div>
+            <div class="info-content">
+                <?= DetailView::widget([
+                    'model' => $model,
+                    'template' => "<p><span class='mr-2'><b>{label}:</b></span><span>{value}</span></p>",
+                    'attributes' => [
+                        'name',
+                        'inn',
+                        'director',
+                        'adress:ntext',
+                    ],
+                ]) ?>
+                <p class="nbsp"> &nbsp; </p>
+            </div>
+            <?= $footer ?>
+        </div>
+    </div>
 </div>
+
+
+
+

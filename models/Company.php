@@ -2,6 +2,7 @@
 
 namespace app\models;
 
+use app\models\admin\CompaniesHistory;
 use Yii;
 
 /**
@@ -23,6 +24,11 @@ class Company extends \yii\db\ActiveRecord
         return 'companies';
     }
 
+    public static function primaryKey()
+    {
+        return ["inn"];
+    }
+
     /**
      * {@inheritdoc}
      */
@@ -42,11 +48,44 @@ class Company extends \yii\db\ActiveRecord
     public function attributeLabels()
     {
         return [
-            'id' => 'ID',
             'name' => 'Название',
             'inn' => 'ИНН',
             'director' => 'Директор',
             'adress' => 'Адрес',
         ];
+    }
+
+    public function getHistoryToUpdate()
+    {
+//        if ($model = CompaniesHistory::find()->where(['inn'=>$company['Company']['inn']])) {
+//            return $model->one();
+//        }
+
+
+            $model = new CompaniesHistory();
+            $post = Yii::$app->request->post();
+            try {
+                $model->load($post);
+                $model->save();
+//                $model = CompaniesHistory::find()->where(['inn' => $post['Company']['inn']]);
+//                return $model->one();
+            } catch (\Exception $exception) {
+                return [false,$exception];
+            }
+
+
+
+
+//            $model->name = $company['Company']['name'];
+//            $model->inn = $company['Company']['inn'];
+//            $model->director = $company['Company']['director'];
+//            $model->adress = $company['Company']['adress'];
+//            if ($model->save() === false) {
+//                return false;
+//            }
+//            $model = CompaniesHistory::find()->where(['inn' => $company['Company']['inn']]);
+//            return $model->one();
+//        }
+//        return false;
     }
 }

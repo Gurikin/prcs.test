@@ -28,6 +28,11 @@ AppAsset::register($this);
 
 <div class="wrap">
     <?php
+    if (!Yii::$app->user->isGuest) {
+        $adminLink = Yii::$app->getUser()->identity->role === 'admin' ? (['label' => 'Администрирование', 'url' => ['admin/companies-history/admin-index']]) : (['label' => 'Панель редактирования', 'url' => ['admin/companies-history/editor-index']]);
+    } else {
+        $adminLink = '';
+    }
     NavBar::begin([
         'brandLabel' => Yii::$app->name,
         'brandUrl' => Yii::$app->homeUrl,
@@ -39,9 +44,11 @@ AppAsset::register($this);
         'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => [
             ['label' => 'Список компаний', 'url' => ['/company/index']],
+            $adminLink,
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]
-            ) : (
+            ) :
+                (
                 '<li>'
                 . Html::beginForm(['/site/logout'], 'post')
                 . Html::submitButton(
@@ -50,7 +57,7 @@ AppAsset::register($this);
                 )
                 . Html::endForm()
                 . '</li>'
-            )
+            ),
         ],
     ]);
     NavBar::end();
@@ -59,6 +66,7 @@ AppAsset::register($this);
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
+            'itemTemplate' => "{link}&nbsp;/&nbsp;",
         ]) ?>
         <?= Alert::widget() ?>
         <?= $content ?>

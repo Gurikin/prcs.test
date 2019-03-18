@@ -4,11 +4,11 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Company*/
+/* @var $model app\models\admin\CompaniesHistory */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
-<div class="company-form">
+<div class="companies-history-form">
 
     <?php $form = ActiveForm::begin(); ?>
 

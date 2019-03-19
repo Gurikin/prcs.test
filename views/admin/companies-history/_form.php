@@ -14,6 +14,8 @@ use yii\widgets\ActiveForm;
 
     <?= $form->field($model, 'name')->textInput(['maxlength' => true]) ?>
 
+    <?= $form->field($model, 'company_id')->textInput(['value' => $model->getAttribute('company_id')]) ?>
+
     <?= $form->field($model, 'inn')->textInput() ?>
 
     <?= $form->field($model, 'director')->textInput(['maxlength' => true]) ?>

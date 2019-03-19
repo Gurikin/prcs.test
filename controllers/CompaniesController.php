@@ -2,6 +2,7 @@
 
 namespace app\controllers;
 
+use app\models\admin\CompaniesHistory;
 use app\models\admin\CompaniesHistorySearch;
 use app\models\Utils;
 use Yii;
@@ -115,9 +116,10 @@ class CompaniesController extends Controller
     public function actionCreate()
     {
         $model = new Companies();
+        $historyModel = $model->createCompany();
 
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
+        if ($historyModel !== NULL && $historyModel !== false) {
+            return $this->redirect(['view', 'id' => $historyModel->company_id]);
         }
 
         return $this->render('create', [

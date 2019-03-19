@@ -3,10 +3,10 @@
 use yii\helpers\Html;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\admin\CompaniesHistory */
+/* @var $model app\models\Companies*/
 
 $this->title = 'Create Company';
-$this->params['breadcrumbs'][] = ['label' => 'Companies Histories', 'url' => ['index']];
+$this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
 ?>
 <div class="companies-history-create">

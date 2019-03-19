@@ -21,6 +21,13 @@ use Yii;
  */
 class CompaniesHistory extends \yii\db\ActiveRecord
 {
+    const DENIED = 0;
+    const PENDING_APPROVAL = 1;
+    const COMPLETED = 2;
+    const CREATED = 3;
+    const DELETED = 4;
+    const ARCHIVED = 5;
+
     /**
      * {@inheritdoc}
      */
@@ -73,10 +80,21 @@ class CompaniesHistory extends \yii\db\ActiveRecord
      * @param $id
      * @return bool|null
      */
-    public function deniedChange() {
+    public function deniedChange()
+    {
         $company = $this->getCompany()->one();
-        $company->status = 0;
-        $this->status = 0;
+        $company->setAttribute(['status', self::DENIED]);
+        $this->setAttribute('status', self::DENIED);
+        if ($this->save() === false || $company->save() === false) {
+            return false;
+        }
+        return true;
+    }
+
+    public function deleteCompany() {
+        $company = Companies::findOne($this->company_id);
+        $this->setAttribute('status', self::DELETED);
+        $company->setAttribute('status', self::DELETED);
         if ($this->save() === false || $company->save() === false) {
             return false;
         }

@@ -41,7 +41,7 @@ class CompaniesSearch extends Companies
      */
     public function search($params)
     {
-        $query = Companies::find();
+        $query = Companies::find()->where('status < :status',['status'=>3]);
 
         // add conditions that should always apply here
 

@@ -95,24 +95,6 @@ class CompaniesHistoryController extends Controller
     }
 
     /**
-     * Creates a new CompaniesHistory model.
-     * If creation is successful, the browser will be redirected to the 'view' page.
-     * @return mixed
-     */
-    public function actionCreate()
-    {
-        $model = new CompaniesHistory();
-
-        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-            return $this->redirect(['view', 'id' => $model->id]);
-        }
-
-        return $this->render('create', [
-            'model' => $model,
-        ]);
-    }
-
-    /**
      * Updates an existing CompaniesHistory model.
      * If update is successful, the browser will be redirected to the 'view' page.
      * @param integer $id
@@ -141,9 +123,9 @@ class CompaniesHistoryController extends Controller
      */
     public function actionDelete($id)
     {
-        $this->findModel($id)->delete();
+        $this->findModel($id)->deleteCompany();
 
-        return $this->redirect(['index']);
+        return $this->redirect(['../../companies/index']);
     }
 
     public function actionDeniedChanges($id) {

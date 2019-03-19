@@ -4,7 +4,7 @@ use yii\helpers\Html;
 use yii\widgets\ActiveForm;
 
 /* @var $this yii\web\View */
-/* @var $model app\models\CompanySearch */
+/* @var $model app\models\CompaniesSearch */
 /* @var $form yii\widgets\ActiveForm */
 ?>
 
@@ -36,6 +36,8 @@ use yii\widgets\ActiveForm;
                     <?= $form->field($model, 'director', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('director', ['placeholder' => "Директор"])->label(false) ?>
 
                     <?= $form->field($model, 'adress', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('adress', ['placeholder' => "Адрес"])->label(false) ?>
+
+                    <?php if (!Yii::$app->user->isGuest) {echo ($form->field($model, 'status', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('status', ['placeholder' => "Статус"])->label(false));} ?>
 
                     <?= Html::submitButton('Search', ['class' => 'btn btn-dark']) ?>
 

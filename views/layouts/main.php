@@ -43,7 +43,7 @@ AppAsset::register($this);
     echo Nav::widget([
         'options' => ['class' => 'navbar-nav ml-auto'],
         'items' => [
-            ['label' => 'Список компаний', 'url' => ['/company/index']],
+            ['label' => 'Список компаний', 'url' => ['/companies/index']],
             $adminLink,
             Yii::$app->user->isGuest ? (
                 ['label' => 'Login', 'url' => ['/site/login']]

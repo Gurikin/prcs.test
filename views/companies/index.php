@@ -6,7 +6,7 @@ use yii\widgets\Pjax;
 use yii\widgets\ListView;
 
 /* @var $this yii\web\View */
-/* @var $searchModel app\models\CompanySearch */
+/* @var $searchModel app\models\CompaniesSearch */
 /* @var $dataProvider yii\data\ActiveDataProvider */
 
 $this->title = 'Companies';

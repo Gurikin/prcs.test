@@ -24,7 +24,7 @@ class CompaniesHistoryController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['editor-index', 'admin-index', 'view', 'create', 'update', 'delete', 'moderate'],
+                'only' => ['editor-index', 'admin-index', 'view', 'create', 'update', 'delete', 'moderate', 'denied-changes'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -35,7 +35,7 @@ class CompaniesHistoryController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['admin-index', 'view', 'update', 'delete'],
+                        'actions' => ['admin-index', 'view', 'delete', 'denied-changes'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->getUser()->identity->role === 'admin';
                         }
@@ -144,6 +144,12 @@ class CompaniesHistoryController extends Controller
         $this->findModel($id)->delete();
 
         return $this->redirect(['index']);
+    }
+
+    public function actionDeniedChanges($id) {
+        $model = $this->findModel($id);
+        $model->deniedChange();
+        return $this->redirect(['../../companies/view','id'=>$model->company_id]);
     }
 
     /**

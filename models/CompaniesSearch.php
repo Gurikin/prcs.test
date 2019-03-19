@@ -4,13 +4,13 @@ namespace app\models;
 
 use yii\base\Model;
 use yii\data\ActiveDataProvider;
-use app\models\Company;
+use app\models\Companies;
 use yii\data\Sort;
 
 /**
  * CompanySearch represents the model behind the search form of `app\models\Company`.
  */
-class CompanySearch extends Company
+class CompaniesSearch extends Companies
 {
     /**
      * {@inheritdoc}
@@ -18,7 +18,7 @@ class CompanySearch extends Company
     public function rules()
     {
         return [
-            [['inn'], 'integer'],
+            [['inn', 'status'], 'integer'],
             [['name', 'director', 'adress'], 'safe'],
         ];
     }
@@ -41,7 +41,7 @@ class CompanySearch extends Company
      */
     public function search($params)
     {
-        $query = Company::find();
+        $query = Companies::find();
 
         // add conditions that should always apply here
 
@@ -59,6 +59,10 @@ class CompanySearch extends Company
             // $query->where('0=1');
             return $dataProvider;
         }
+
+        $query->andFilterWhere([
+            'status' => $this->status,
+        ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'inn', $this->inn])

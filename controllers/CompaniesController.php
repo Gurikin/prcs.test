@@ -2,10 +2,14 @@
 
 namespace app\controllers;
 
+use app\models\admin\CompaniesHistorySearch;
+use app\models\Utils;
 use Yii;
-use app\models\Company;
-use app\models\CompanySearch;
+use app\models\Companies;
+use app\models\CompaniesSearch;
+use yii\data\ActiveDataProvider;
 use yii\data\Sort;
+use yii\db\StaleObjectException;
 use yii\filters\AccessControl;
 use yii\web\Controller;
 use yii\web\NotFoundHttpException;
@@ -14,7 +18,7 @@ use yii\filters\VerbFilter;
 /**
  * CompanyController implements the CRUD actions for Company model.
  */
-class CompanyController extends Controller
+class CompaniesController extends Controller
 {
     /**
      * {@inheritdoc}
@@ -24,7 +28,7 @@ class CompanyController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['create', 'update', 'delete'],
+                'only' => ['create', 'update', 'delete', 'moderate'],
                 'rules' => [
                     [
                         'allow' => true,
@@ -35,7 +39,7 @@ class CompanyController extends Controller
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['create', 'update', 'delete'],
+                        'actions' => ['delete', 'moderate'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->getUser()->identity->role === 'admin';
                         }
@@ -57,7 +61,7 @@ class CompanyController extends Controller
      */
     public function actionIndex()
     {
-        $searchModel = new CompanySearch();
+        $searchModel = new CompaniesSearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
         $sort = new Sort([
             'attributes' => [
@@ -91,8 +95,15 @@ class CompanyController extends Controller
      */
     public function actionView($id)
     {
+        $model = $this->findModel($id);
+        $historyModel = $model->getCompaniesHistories();
+        $dataProvider = new ActiveDataProvider([
+            'query' => $historyModel,
+        ]);
+
         return $this->render('view', [
-            'model' => $this->findModel($id),
+            'model' => $model,
+            'dataProvider' => $dataProvider,
         ]);
     }
 
@@ -103,7 +114,7 @@ class CompanyController extends Controller
      */
     public function actionCreate()
     {
-        $model = new Company();
+        $model = new Companies();
 
         if ($model->load(Yii::$app->request->post()) && $model->save()) {
             return $this->redirect(['view', 'id' => $model->id]);
@@ -124,27 +135,31 @@ class CompanyController extends Controller
     public function actionUpdate($id)
     {
         $model = $this->findModel($id);
-//        $post = Yii::$app->request->post();
-        $historyModel = $model->getHistoryToUpdate();
-        if ($historyModel !== false) {
-            var_dump($historyModel);
-//            return $this->render('@app/views/admin/companies-history/view', [
-//                'model' => $historyModel,
-//            ]);
+        $historyModel = $model->getHistoryToUpdate($id);
+        try {
+            if ($historyModel !== null) {
+                if ($historyModel !== false) {
+                    return $this->redirect(['view', 'id' => $id]);
+                }
+            }
+        } catch (StaleObjectException $e) {
+            Utils::debug($e);
         }
+        $historyModel = $this->findModel($id);
         return $this->render('update', [
-            'model' => $model,
-            'historyModel' => $historyModel
+            'model' => $historyModel
         ]);
-//        $model = $this->findModel($id);
-//
-//        if ($model->load(Yii::$app->request->post()) && $model->save()) {
-//            return $this->redirect(['view', 'id' => $model->id]);
-//        }
-//
-//        return $this->render('update', [
-//            'model' => $model,
-//        ]);
+    }
+
+    /**
+     * @param $id
+     * @return string
+     * @throws NotFoundHttpException
+     */
+    public function actionModerate($id) {
+        $model = $this->findModel($id);
+        $model->moderate($id);
+        return $this->redirect(['view', 'id' => $id]);
     }
 
     /**
@@ -165,12 +180,12 @@ class CompanyController extends Controller
      * Finds the Company model based on its primary key value.
      * If the model is not found, a 404 HTTP exception will be thrown.
      * @param integer $id
-     * @return Company the loaded model
+     * @return Companies the loaded model
      * @throws NotFoundHttpException if the model cannot be found
      */
     protected function findModel($id)
     {
-        if (($model = Company::findOne($id)) !== null) {
+        if (($model = Companies::findOne($id)) !== null) {
             return $model;
         }
 

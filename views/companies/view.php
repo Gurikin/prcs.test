@@ -2,9 +2,11 @@
 
 use yii\helpers\Html;
 use yii\widgets\DetailView;
+use yii\grid\GridView;
+
 
 /* @var $this yii\web\View */
-/* @var $model app\models\Company */
+/* @var $model app\models\Companies */
 
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
@@ -13,13 +15,15 @@ $this->params['breadcrumbs'][] = $this->title;
 if (!Yii::$app->user->isGuest) {
     $footer = Yii::$app->getUser()->identity->role === 'admin' ? ''
         : '<div class="info-footer d-flex justify-content-end">
-            <a href="/company/update?id='
-            .Html::encode($model->inn)
-            .'" class="btn btn-danger align-right">Update</a>
+            <a href="/companies/update?id='
+        . Html::encode($model->id)
+        . '" class="btn btn-danger align-right">Update</a>
            </div>';
 } else {
     $footer = '';
 }
+
+$searchModel = isset($searchModel) ? $searchModel : null;
 ?>
 <div class="company-view container-fluid d-flex justify-content-center">
     <div class="col-lg-8 col-md-12 col-xs-12 right-content">
@@ -46,6 +50,20 @@ if (!Yii::$app->user->isGuest) {
         </div>
     </div>
 </div>
+<?php
+if (!Yii::$app->user->isGuest):?>
+<hr>
+<div class="container-fluid">
+    <div class="history-block">
+        <h3>История изменений <?= $this->title ?></h3>
+        <?= $this->render('@app/views/layouts/historyWidget',
+            ['dataProvider' => $dataProvider,
+                'searchModel' => $searchModel])
+        ?>
+    </div>
+</div>
+<?php endif?>
+
 
 
 

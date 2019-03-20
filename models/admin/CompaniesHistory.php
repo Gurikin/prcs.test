@@ -83,7 +83,7 @@ class CompaniesHistory extends \yii\db\ActiveRecord
     public function deniedChange()
     {
         $company = $this->getCompany()->one();
-        $company->setAttribute(['status', self::DENIED]);
+        $company->setAttribute('status', self::DENIED);
         $this->setAttribute('status', self::DENIED);
         if ($this->save() === false || $company->save() === false) {
             return false;

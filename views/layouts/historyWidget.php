@@ -50,7 +50,7 @@ echo GridView::widget([
                             'title' => Yii::t('yii', 'view'),
                             'data-method' => 'post',
                             'data-pjax' => '0',
-                            'class' => ($model['status'] >= 1 && $model['status'] !== 3) ? 'btn-link disabled' : '',
+                            'class' => (in_array($model['status'],[0,2,4,5])) ? 'btn-link disabled' : '',
                         ]);
                 },
                 'denied' => function ($url, $model) {

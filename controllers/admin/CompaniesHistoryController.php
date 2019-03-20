@@ -24,18 +24,18 @@ class CompaniesHistoryController extends Controller
         return [
             'access' => [
                 'class' => AccessControl::className(),
-                'only' => ['editor-index', 'admin-index', 'view', 'create', 'update', 'delete', 'moderate', 'denied-changes'],
+                'only' => ['index', 'view', 'create', 'update', 'delete', 'moderate', 'denied-changes'],
                 'rules' => [
                     [
                         'allow' => true,
-                        'actions' => ['editor-index', 'view', 'create', 'update'],
+                        'actions' => ['index', 'view', 'create', 'update'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->getUser()->identity->role === 'editor';
                         }
                     ],
                     [
                         'allow' => true,
-                        'actions' => ['admin-index', 'view', 'delete', 'denied-changes'],
+                        'actions' => ['index', 'view', 'delete', 'denied-changes'],
                         'matchCallback' => function ($rule, $action) {
                             return Yii::$app->getUser()->identity->role === 'admin';
                         }
@@ -55,22 +55,7 @@ class CompaniesHistoryController extends Controller
      * Lists all CompaniesHistory models.
      * @return mixed
      */
-    public function actionEditorIndex()
-    {
-        $searchModel = new CompaniesHistorySearch();
-        $dataProvider = $searchModel->search(Yii::$app->request->queryParams);
-
-        return $this->render('index', [
-            'searchModel' => $searchModel,
-            'dataProvider' => $dataProvider,
-        ]);
-    }
-
-    /**
-     * Lists all CompaniesHistory models.
-     * @return mixed
-     */
-    public function actionAdminIndex()
+    public function actionIndex()
     {
         $searchModel = new CompaniesHistorySearch();
         $dataProvider = $searchModel->search(Yii::$app->request->queryParams);

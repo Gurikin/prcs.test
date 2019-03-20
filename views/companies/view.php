@@ -3,11 +3,11 @@
 use yii\helpers\Html;
 use yii\widgets\DetailView;
 use yii\grid\GridView;
+use yii\widgets\Pjax;
 
 
 /* @var $this yii\web\View */
 /* @var $model app\models\Companies */
-
 $this->title = $model->name;
 $this->params['breadcrumbs'][] = ['label' => 'Companies', 'url' => ['index']];
 $this->params['breadcrumbs'][] = $this->title;
@@ -63,8 +63,3 @@ if (!Yii::$app->user->isGuest):?>
     </div>
 </div>
 <?php endif?>
-
-
-
-
-

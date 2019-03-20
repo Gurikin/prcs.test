@@ -11,19 +11,18 @@ use yii\widgets\ListView;
 
 $this->title = 'Companies';
 $this->params['breadcrumbs'][] = $this->title;
+Pjax::begin();
 ?>
 <div class="company-index">
-
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
-    <?= $this->render('_search', ['model' => $searchModel,'sort'=>$sort]); ?>
+    <?= $this->render('_search', ['model' => $searchModel, 'sort' => $sort]); ?>
 
     <?php
     $columns = 3;
     echo ListView::widget([
         'dataProvider' => $dataProvider,
         'layout' => '{items}<div class="col-12">{pager}</div>',
-        'itemOptions' => ['class' => "col-lg-4 col-md-6 col-xs-10 org-cont"],
+        'itemOptions' => ['class' => "col-lg-6 col-md-6 col-xs-10 org-cont"],
         'itemView' => 'companyCard',
         'options' => ['class' => 'container d-flex flex-wrap align-items-stretch justify-content-between'],
         'pager' => [
@@ -41,5 +40,6 @@ $this->params['breadcrumbs'][] = $this->title;
             'nextPageCssClass' => 'page-item',
         ],
     ]);
-    Pjax::end(); ?>
+    Pjax::end();
+    ?>
 </div>

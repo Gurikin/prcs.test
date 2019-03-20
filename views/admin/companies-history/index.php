@@ -18,11 +18,10 @@ $searchModel = isset($searchModel) ? $searchModel : null;
 <div class="companies-history-index">
 
     <h1><?= Html::encode($this->title) ?></h1>
-    <?php Pjax::begin(); ?>
     <p>
         <?= Html::a('Create Company', ['companies/create'], ['class' => 'btn btn-success']) ?>
     </p>
-
+    <?php Pjax::begin(); ?>
     <?= $this->render('@app/views/layouts/historyWidget', ['dataProvider' => $dataProvider, 'searchModel' => $searchModel])?>
     <?php Pjax::end(); ?>
 </div>

@@ -31,7 +31,7 @@ use yii\widgets\ActiveForm;
                 <div class="input-group input-group-md mb-1">
                     <?= $form->field($model, 'name', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('name', ['placeholder' => "Название"])->label(false) ?>
 
-                    <?= $form->field($model, 'inn', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('inn', ['placeholder' => "ИНН"])->label(false) ?>
+                    <?= $form->field($model, 'inn', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('inn', ['placeholder' => "ИНН",'max' => true])->label(false) ?>
 
                     <?= $form->field($model, 'director', ['options' => ['tag' => false], 'template' => '{input}'])->textInput()->input('director', ['placeholder' => "Директор"])->label(false) ?>
 

@@ -59,14 +59,14 @@ class CompaniesHistorySearch extends CompaniesHistory
         // grid filtering conditions
         $query->andFilterWhere([
             'id' => $this->id,
-            'inn' => $this->inn,
             'status' => $this->status,
             'last_change' => $this->last_change,
         ]);
 
         $query->andFilterWhere(['like', 'name', $this->name])
             ->andFilterWhere(['like', 'director', $this->director])
-            ->andFilterWhere(['like', 'adress', $this->adress]);
+            ->andFilterWhere(['like', 'adress', $this->adress])
+            ->andFilterWhere(['like', 'inn', $this->inn]);
 
         return $dataProvider;
     }

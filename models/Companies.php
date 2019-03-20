@@ -40,11 +40,20 @@ class Companies extends \yii\db\ActiveRecord
     {
         return [
             [['name', 'inn', 'director', 'adress'], 'required'],
-            [['inn', 'status'], 'integer'],
+            [['status'], 'integer'],
+            [['inn'], 'match', 'pattern' => '~^\d{12}$~i', 'message'=>'ИНН должен состоять из 12 цифр без пробелов и др. знаков'],//'number', 'min'=>1, 'max'=>999999999999],//'filter', 'filter'=>[$this,'checkInn']],//'match', 'pattern' => '~^\d{12}$~i'],
             [['adress'], 'string'],
             [['name', 'director'], 'string', 'max' => 255],
             [['inn'], 'unique'],
         ];
+    }
+
+    public function checkInn($inn) {
+        $pattern = '~^\d{12}$~';
+        if (preg_match($pattern,$inn)) {
+            return true;
+        }
+        return false;
     }
 
     /**
@@ -81,12 +90,12 @@ class Companies extends \yii\db\ActiveRecord
             $historyModel = new CompaniesHistory();
             $maxId = self::find()->max('id');
             $historyModel->setAttributes([
-                'company_id'    => $maxId,
-                'status'        => self::CREATED,
-                'name'          => $post['Companies']['name'],
-                'inn'           => $post['Companies']['inn'],
-                'director'      => $post['Companies']['director'],
-                'adress'        => $post['Companies']['adress'],
+                'company_id' => $maxId,
+                'status' => self::CREATED,
+                'name' => $post['Companies']['name'],
+                'inn' => $post['Companies']['inn'],
+                'director' => $post['Companies']['director'],
+                'adress' => $post['Companies']['adress'],
             ]);
             if ($historyModel->save()) {
                 return $historyModel;

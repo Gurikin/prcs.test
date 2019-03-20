@@ -9,6 +9,7 @@ use yii\bootstrap4\Nav;
 use yii\bootstrap4\NavBar;
 use yii\widgets\Breadcrumbs;
 use app\assets\AppAsset;
+use yii\widgets\Pjax;
 
 AppAsset::register($this);
 ?>
@@ -25,11 +26,10 @@ AppAsset::register($this);
 </head>
 <body>
 <?php $this->beginBody() ?>
-
 <div class="wrap">
     <?php
     if (!Yii::$app->user->isGuest) {
-        $adminLink = Yii::$app->getUser()->identity->role === 'admin' ? (['label' => 'Администрирование', 'url' => ['admin/companies-history/admin-index']]) : (['label' => 'Панель редактирования', 'url' => ['admin/companies-history/editor-index']]);
+        $adminLink = Yii::$app->getUser()->identity->role === 'admin' ? (['label' => 'Администрирование', 'url' => ['admin/companies-history/index']]) : (['label' => 'Панель редактирования', 'url' => ['admin/companies-history/index']]);
     } else {
         $adminLink = '';
     }
@@ -62,17 +62,17 @@ AppAsset::register($this);
     ]);
     NavBar::end();
     ?>
-
     <div class="container">
         <?= Breadcrumbs::widget([
             'links' => isset($this->params['breadcrumbs']) ? $this->params['breadcrumbs'] : [],
             'itemTemplate' => "{link}&nbsp;/&nbsp;",
         ]) ?>
         <?= Alert::widget() ?>
-        <?= $content ?>
+        <?php
+            echo $content;
+        ?>
     </div>
 </div>
-
 <footer class="footer">
     <div class="container">
         <p class="pull-left">&copy; My Company <?= date('Y') ?></p>
@@ -80,7 +80,6 @@ AppAsset::register($this);
         <p class="pull-right"><?= Yii::powered() ?></p>
     </div>
 </footer>
-
 <?php $this->endBody() ?>
 </body>
 </html>
